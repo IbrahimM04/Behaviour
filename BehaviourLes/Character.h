@@ -15,14 +15,14 @@ public:
 		EVADE
 	};
 public:
-	Character(AvailableBehaviours aStartBehaviour, 
-		int aStartPosition = 0, 
+	Character(AvailableBehaviours aStartBehaviour,
+		int aStartPosition = 0,
 		std::string anIcon = "x",
-		Character* aTarget = nullptr
+		Character * aTarget = nullptr
 	);
 	~Character();
 	void SetTarget(Character* aTarget);
-	void Setbehaviour(AvailableBehaviours aBehaviour);
+	void Setbehaviour(AvailableBehaviours aBehaviour);	
 	int Update();
 	int GetPosition();
 	std::string GetIcon();

@@ -6,12 +6,13 @@
 #include <vector>
 #include <vector>
 #include <string>
+#include <algorithm>
 #include "Character.h"
 #include "Behaviour.h"
 #include "ChaseBehaviour.h"
 #include "EvadeBehaviour.h"
 
-double delay = 1.5;
+double delay = 0.2;
 double previousFrameTime = 0.0;
 int maxWidth = 100;
 std::vector<std::string> scene;
@@ -19,10 +20,12 @@ bool running = true;
 int main()
 {
 	//Characters aanmaken
-	Character player(Character::AvailableBehaviours::IDLE, 20, "E");
-	Character enemy(Character::AvailableBehaviours::CHASE, 40, "C", &player);
+	Character player(Character::AvailableBehaviours::IDLE, 20, "1");
+	Character enemy(Character::AvailableBehaviours::IDLE, 40, "2", &player);
+	Character player2(Character::AvailableBehaviours::IDLE, 60, "3");
 
 	//Game mechanics activeren
+	enemy.Setbehaviour(Character::AvailableBehaviours::CHASE);
 	player.SetTarget(&enemy);
 	player.Setbehaviour(Character::AvailableBehaviours::EVADE);
 
@@ -30,7 +33,7 @@ int main()
 	std::vector<Character*> characters{ &player, &enemy };
 
 	//een scene van 100 breed aanmaken
-	scene.resize(50);
+	scene.resize(100);
 
 	//deze scene vullen met _
 	
@@ -48,13 +51,19 @@ int main()
 			for (std::string s : scene) {
 				std::cout << s;
 			}
-
-
 			previousFrameTime = clock();
 		}
 		if (characters.at(0)->GetPosition() == characters.at(1)->GetPosition()) {
-			std::cout << "\nGAME OVER\nPress ENTER to quit" << std::endl;
-			running = false;
+			delay = 0.5;
+			characters.erase(std::remove(characters.begin(), characters.end(), &player), characters.end());
+			characters.push_back(&player2);
+			enemy.SetTarget(&player2);
+			player2.SetTarget(&enemy);
+			player2.Setbehaviour(Character::AvailableBehaviours::IDLE);
+			if (characters.at(1)->GetPosition() == characters.at(2)->GetPosition()) {
+				std::cout << "\nGAME OVER\n\nALL EVADERS WERE CAUGHT";
+				running = false;
+			}
 		}
 	}
 	std::cin.get();

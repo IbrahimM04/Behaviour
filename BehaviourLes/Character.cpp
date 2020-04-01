@@ -28,6 +28,8 @@ void Character::SetTarget(Character* aTarget)
 	target = aTarget;
 }
 
+
+
 void Character::Setbehaviour(AvailableBehaviours aBehaviour)
 {
 
